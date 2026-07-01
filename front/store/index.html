@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda — Praessia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/front/style.css" rel="stylesheet">
+    <link href="tienda.css" rel="stylesheet">
+</head>
+
+<link rel="icon" type="image/svg+xml" href="/img/logo_negativo_negro.svg" />
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════
+     HEADER (igual al resto del sitio)
+════════════════════════════════════════════════ -->
+    <header class="main-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="/img/imagotipo.svg" alt="Praessia logo" class="logo">
+                </div>
+                <div class="col">
+                    <nav class="nav-container">
+                        <ul class="nav-menu">
+                            <li><a href="/front/home/index.html">Home</a></li>
+                            <li><a href="/front/store/index.html" class="active">Tienda</a></li>
+                            <li><a href="/front/about-us/index.html">¿Quiénes somos?</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════
+     HERO TIENDA
+════════════════════════════════════════════════ -->
+    <section class="shop-hero">
+        <div class="container">
+            <p class="shop-hero-eyebrow">Colección Praessia</p>
+            <h1 class="shop-hero-title">Tu Esencia, Tu Presencia</h1>
+            <p class="shop-hero-sub">Fragancias seleccionadas con criterio para quienes eligen con intención, no por tendencia</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+     BARRA HERRAMIENTAS: búsqueda · filtros · carrito
+════════════════════════════════════════════════ -->
+    <div class="shop-toolbar">
+        <div class="container">
+            <div class="shop-toolbar-inner">
+
+                <!-- Búsqueda por nombre -->
+                <div class="shop-search-wrap">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="shopSearch" class="shop-search" placeholder="Buscar fragancia..."
+                        autocomplete="off" aria-label="Buscar fragancia por nombre">
+                    <button type="button" class="search-close" aria-label="Cerrar búsqueda">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Filtros género -->
+                <div class="shop-filters" role="group" aria-label="Filtrar por género">
+                    <button class="filter-btn active" data-filter="all" data-mobile="Todo">Todos</button>
+                    <button class="filter-btn" data-filter="masculina" data-mobile="Mas.">Masculina</button>
+                    <button class="filter-btn" data-filter="femenina" data-mobile="Fem.">Femenina</button>
+                    <button class="filter-btn" data-filter="unisex" data-mobile="Uni.">Unisex</button>
+                </div>
+
+                <!-- Contador -->
+                <span class="shop-results-count" id="resultsCount"></span>
+
+                <!-- Botón carrito -->
+                <button class="cart-btn" id="btnOpenCart" aria-label="Abrir carrito">
+                    <i class="bi bi-bag"></i>
+                    <span>Carrito</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     GRID DE PRODUCTOS
+════════════════════════════════════════════════ -->
+    <section class="shop-grid-section">
+        <div class="container">
+            <div class="shop-grid" id="shopGrid">
+                <!-- Las tarjetas se generan dinámicamente por tienda.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+     SECCIÓN RESEÑAS
+════════════════════════════════════════════════ -->
+    <section class="reviews-section" id="resenasSection">
+        <div class="container">
+
+            <div class="reviews-header">
+                <p class="reviews-eyebrow">Lo que dicen</p>
+                <h2 class="reviews-title">Experiencias Praessia</h2>
+            </div>
+
+            <!-- Las reseñas aprobadas se renderizan aquí (Carousel) -->
+            <div id="reviewsCarousel" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
+                <div class="carousel-inner" id="reviewsGrid">
+                    <!-- Placeholder mientras carga -->
+                    <div class="carousel-item active">
+                        <div style="text-align:center; padding:80px 40px; color:var(--shop-muted);">
+                            <i class="bi bi-chat-heart" style="font-size:2rem; opacity:0.3; display:block; margin-bottom:10px;"></i>
+                            <span style="font-family:'Heebo'; font-size:0.9rem;">Cargando experiencias...</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Controles de navegación -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev" aria-label="Anterior">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next" aria-label="Siguiente">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <!-- Formulario nueva reseña -->
+            <div class="review-form-wrap">
+                <h3 class="review-form-title">Comparte tu experiencia</h3>
+
+                <div id="reviewSuccessMsg" class="review-success-msg">
+                    <i class="bi bi-check-circle" style="font-size:1.4rem; display:block; margin-bottom:8px;"></i>
+                    Tu experiencia es parte de nuestra historia. ¡Gracias por escribirnos!
+                </div>
+
+                <form id="reviewForm" novalidate>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reviewName">Tu nombre</label>
+                        <input type="text" id="reviewName" class="form-control" placeholder="Ej: María C."
+                            maxlength="60" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reviewPerfume">Fragancia</label>
+                        <select id="reviewPerfume" class="form-control" required>
+                            <option value="">Selecciona la fragancia...</option>
+                            <!-- Se llena dinámicamente -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Calificación</label>
+                        <div class="star-rating" id="starRating" role="group" aria-label="Calificación">
+                            <button type="button" class="star-btn" data-val="1" aria-label="1 estrella">★</button>
+                            <button type="button" class="star-btn" data-val="2" aria-label="2 estrellas">★</button>
+                            <button type="button" class="star-btn" data-val="3" aria-label="3 estrellas">★</button>
+                            <button type="button" class="star-btn" data-val="4" aria-label="4 estrellas">★</button>
+                            <button type="button" class="star-btn" data-val="5" aria-label="5 estrellas">★</button>
+                        </div>
+                        <input type="hidden" id="reviewStars" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reviewText">Tu experiencia</label>
+                        <textarea id="reviewText" class="form-control"
+                            placeholder="Cuéntanos cómo te hace sentir esta fragancia..." maxlength="400"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit-review">
+                        <i class="bi bi-send me-2"></i>Enviar reseña
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+    <footer class="footer-praessia">
+        <div class="footer-container">
+            <div class="footer-col footer-brand">
+                <br>
+                <p class="footer-slogan">tu presencia define la esencia</p>
+            </div>
+            <div class="footer-col">
+                <h6>Contáctanos</h6>
+                <p class="contact-item">
+                    <a href="https://wa.me/573000000000?text=Hola%20Praessia%20necesito%20más%20información"
+                        target="_blank" class="social-btn">
+                        <i class="bi bi-whatsapp"></i>
+                    </a>
+                </p>
+            </div>
+            <div class="footer-col">
+                <h6>Síguenos</h6>
+                <a href="https://instagram.com/praessia" target="_blank" class="social-btn">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Praessia · Perfumería inspirada en fragancias de diseñador y nicho · Medellín, Colombia</p>
+            <div class="footer-links">
+                <a href="/front/privacy-policy/index.html">Política de privacidad</a>
+                <span>·</span>
+                <a href="/front/terms-and-conditions/index.html">Términos y condiciones</a>
+                <span>·</span>
+                <a href="/front/customer-requests/index.html">PQRS</a>
+                <span>·</span>
+                <a href="/front/faq/index.html">Preguntas frecuentes</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════
+     MODAL FICHA TÉCNICA
+════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box">
+            <button class="modal-close" id="modalClose" aria-label="Cerrar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="modal-inner">
+
+                <!-- Columna imagen -->
+                <div class="modal-img-col">
+                    <img id="modalImg" class="modal-img" src="" alt="">
+                    <div id="modalImgPlaceholder" class="modal-img-placeholder">
+                        <i class="bi bi-droplet-half"></i>
+                        <span>Imagen próximamente</span>
+                    </div>
+                </div>
+
+                <!-- Columna contenido -->
+                <div class="modal-content-col">
+                    <p class="modal-eyebrow" id="modalFamily">—</p>
+                    <h2 class="modal-title" id="modalTitle">—</h2>
+                    <p class="modal-description" id="modalDescription">—</p>
+
+                    <!-- Especificaciones -->
+                    <div class="modal-specs">
+                        <div class="modal-spec">
+                            <span class="modal-spec-label">Concentración</span>
+                            <span class="modal-spec-value" id="modalConcentration">—</span>
+                        </div>
+                        <div class="modal-spec">
+                            <span class="modal-spec-label">Presentación</span>
+                            <span class="modal-spec-value" id="modalSize">—</span>
+                        </div>
+                        <div class="modal-spec">
+                            <span class="modal-spec-label">Clima ideal</span>
+                            <span class="modal-spec-value" id="modalClimate">—</span>
+                        </div>
+                        <div class="modal-spec">
+                            <span class="modal-spec-label">Ocasión</span>
+                            <span class="modal-spec-value" id="modalOccasion">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Pirámide olfativa -->
+                    <div class="modal-pyramid">
+                        <div class="modal-pyramid-title">Pirámide olfativa</div>
+                        <div class="modal-note-row">
+                            <span class="modal-note-label">Salida</span>
+                            <span class="modal-note-value" id="modalNotesTop">—</span>
+                        </div>
+                        <div class="modal-note-row">
+                            <span class="modal-note-label">Corazón</span>
+                            <span class="modal-note-value" id="modalNotesHeart">—</span>
+                        </div>
+                        <div class="modal-note-row">
+                            <span class="modal-note-label">Fondo</span>
+                            <span class="modal-note-value" id="modalNotesBase">—</span>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="modal-cta-row">
+                        <div class="modal-price">
+                            $139.900
+                            <small>100 ml · Extrait de Parfum</small>
+                        </div>
+                        <button class="btn-modal-cart" id="btnModalCart">
+                            <i class="bi bi-bag-plus"></i>
+                            Añadir al carrito
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     DRAWER CARRITO
+════════════════════════════════════════════════ -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer" role="complementary" aria-label="Carrito de compras">
+
+        <div class="cart-header">
+            <h3><i class="bi bi-bag me-2"></i>Tu carrito</h3>
+            <button class="cart-close" id="btnCloseCart" aria-label="Cerrar carrito">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty-msg" id="cartEmptyMsg">
+                <i class="bi bi-bag"></i>
+                <p style="font-family:'Heebo'; font-size:0.9rem; margin:0;">Tu carrito está vacío</p>
+                <p style="font-family:'Heebo'; font-size:0.8rem; color:var(--shop-muted); margin-top:6px;">
+                    Explora nuestras fragancias
+                </p>
+            </div>
+        </div>
+
+        <div class="cart-footer">
+
+            <!-- Email para recuperación de carrito -->
+            <div class="cart-email-wrap">
+                <label class="cart-email-label" for="cartEmail">
+                    <i class="bi bi-envelope me-1"></i>Tu email (para notificaciones)
+                </label>
+                <input type="email" id="cartEmail" class="cart-email-input" placeholder="hola@ejemplo.com"
+                    autocomplete="email">
+            </div>
+
+            <div class="cart-total-row">
+                <span class="cart-total-label">Total</span>
+                <span class="cart-total-amount" id="cartTotal">$0</span>
+            </div>
+
+            <button class="btn-checkout" id="btnCheckout" disabled>
+                <i class="bi bi-lock"></i>
+                Proceder al pago — Bold
+            </button>
+
+            <p class="cart-secure-note">
+                <i class="bi bi-shield-check"></i>
+                Pago 100% seguro con Bold · SSL encriptado
+            </p>
+
+        </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════
+     TOAST
+════════════════════════════════════════════════ -->
+    <div class="toast-shop" id="shopToast" role="alert" aria-live="polite"></div>
+
+    <!-- ═══════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Datos del catálogo (reutiliza los del quiz) -->
+    <script src="/front/data-perfumes.js"></script>
+    <script src="/front/data-presencias.js"></script>
+
+    <!-- SDK Bold (producción) -->
+    <!-- Reemplaza PUBLIC_KEY por tu llave pública de Bold -->
+    <script src="https://checkout.bold.co/library/bold-checkout.js" data-bold-public-key="TU_PUBLIC_KEY_BOLD"
+        async></script>
+
+    <!-- EmailJS para carrito abandonado -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getFirestore, collection, addDoc, getDocs,
+            query, where, orderBy, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        /* ── CONFIGURACIÓN FIREBASE ───────────────────────────────
+           Reemplaza con tus credenciales reales de Firebase        */
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjtWzX0ntgyTPrwbgMUtVAfz095t9oEog",
+            authDomain: "praessia.firebaseapp.com",
+            projectId: "praessia",
+            storageBucket: "praessia.firebasestorage.app",
+            messagingSenderId: "855337167445",
+            appId: "1:855337167445:web:df9dcf35667a179e6302dc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        /* Exponer para tienda.js */
+        window._praessiaDB = db;
+        window._praessiaFirestore = {
+            collection, addDoc, getDocs, query, where, orderBy, serverTimestamp
+        };
+
+        /* Disparar evento para que tienda.js sepa que Firebase está listo */
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <!-- Lógica principal de la tienda -->
+    <script src="tienda.js"></script>
+
+</body>
+
+</html>
