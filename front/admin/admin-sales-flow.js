@@ -124,14 +124,36 @@ function addProductRow(isFirst = false) {
 
 function fillSaleSelectForRow(rowIndex) {
   const sel = document.getElementById(`saleProduct-${rowIndex}`);
-  if (!sel || typeof perfumes === 'undefined') return;
+  if (!sel || !window.saleProducts) return;
+  const previousValue = sel.value; // preservar selección si el select se reconstruye
   sel.innerHTML = '<option value="">Selecciona...</option>';
-  perfumes.forEach(p => {
+  window.saleProducts.forEach(p => {
     const opt = document.createElement('option');
     opt.value = p.id;
     opt.textContent = cleanPerfumeName ? cleanPerfumeName(p.name) : p.name;
     sel.appendChild(opt);
   });
+  if (previousValue) sel.value = previousValue;
+  setSalePriceFromProduct(rowIndex);
+}
+
+/* Único punto de verdad para llenar "Valor unitario" a partir del producto
+   seleccionado. Se llama tanto al (re)pintar el select como en el evento
+   'change', para que nunca queden desincronizados. */
+function setSalePriceFromProduct(rowIndex) {
+  const sel = document.getElementById(`saleProduct-${rowIndex}`);
+  const priceEl = document.getElementById(`salePrice-${rowIndex}`);
+  if (!sel || !priceEl || !window.saleProducts) return;
+  const prod = window.saleProducts.find(p => String(p.id) === String(sel.value));
+  if (prod) {
+    priceEl.value = prod.valor_unitario || 0;
+    priceEl.readOnly = true;
+  } else {
+    priceEl.value = '';
+    priceEl.readOnly = false;
+  }
+  updateRowTotal(rowIndex);
+  if (typeof updateSummaryTable === 'function') updateSummaryTable();
 }
 
 function updateRowTotal(rowIndex) {

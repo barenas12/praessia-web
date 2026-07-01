@@ -11,11 +11,6 @@ exports.authenticate = (req, res, next) => {
     token = authHeader.slice(7).trim();
   }
 
-  // Debug: log whether token source is cookie or header (do not log token value)
-  try {
-    console.log('[auth] incoming', req.method, req.originalUrl, 'cookiePresent=', !!req.cookies?.[TOKEN_COOKIE_NAME], 'authHeaderPresent=', !!authHeader);
-  } catch (e) {}
-
   if (!token) {
     return res.status(401).json({
       success: false,

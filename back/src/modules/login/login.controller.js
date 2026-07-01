@@ -64,9 +64,7 @@ exports.login = async (req, res) => {
     }
 
     const token = createToken({ userId: user.id, usuario: user.usuario });
-    // Set cookie (do not log token value)
     res.cookie(TOKEN_COOKIE_NAME, token, COOKIE_OPTIONS);
-    try { console.log('[login] cookie set for userId=', user.id, 'sameSite=', COOKIE_OPTIONS.sameSite, 'secure=', COOKIE_OPTIONS.secure); } catch (e) {}
 
     return res.status(200).json({
       success: true,

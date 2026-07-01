@@ -119,11 +119,11 @@ window.addEventListener('adminFirebaseReady', () => {
    LOGIN
 ───────────────────────────────────────────────────────────── */
 function bindLoginEvents() {
-  document.getElementById('btnLogin')?.addEventListener('click', attemptLogin);
-  document.getElementById('loginInput')?.addEventListener('keydown', e => {
-    if (e.key === 'Enter') attemptLogin();
-  });
-  document.getElementById('btnLogout')?.addEventListener('click', logout);
+  // NOTE: login (click, Enter, logout) is fully owned by admin-backend.js's
+  // bindBackendLoginEvents(). Binding it here too caused attemptLogin() to
+  // fire twice per Enter press (duplicate anonymous keydown listeners),
+  // which cascaded into enterPanel() running twice and double-registering
+  // UI listeners like "Añadir otro producto".
 }
 
 async function attemptLogin() {
@@ -220,6 +220,12 @@ function logout() {
    NAVEGACIÓN
 ───────────────────────────────────────────────────────────── */
 function bindAdminEvents() {
+  // Evita registrar todos los listeners más de una vez si enterPanel()
+  // llega a ejecutarse dos veces en la misma carga de página (esto fue
+  // justo lo que causaba que "Añadir otro producto" agregara 2 filas).
+  if (window.__adminEventsBound) return;
+  window.__adminEventsBound = true;
+
   /* Sidebar links */
   document.querySelectorAll('.sidebar-link[data-section]').forEach(btn => {
     btn.addEventListener('click', () => navigateTo(btn.dataset.section));
@@ -720,9 +726,6 @@ function toggleExternalSellerField() {
 }
 
 async function saveSale() {
-  /* FUNCIÓN VISUAL SOLAMENTE */
-  alert('✓ Venta registrada exitosamente!\n\nNota: Esta es una interfaz visual. La conexión a BD se implementará próximamente.');
-
   /* Resetear formulario a paso 1 */
   document.getElementById('step-2-details').style.display = 'none';
   document.getElementById('step-1-client').style.display = 'block';

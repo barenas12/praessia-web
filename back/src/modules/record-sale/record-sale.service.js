@@ -96,12 +96,30 @@ exports.findActiveProducts = async (pool) => {
   }
 };
 
+/* Genera 'YYYY-MM-DD HH:MM:SS' en hora de Colombia (America/Bogota),
+   sin importar la zona horaria del servidor donde corra Node.
+   Antes se guardaba el `fecha` que mandaba el frontend (a veces un ISO
+   string en UTC, ej. "...T20:13:35.000Z"); MySQL lo tomaba tal cual como
+   si ya fuera hora local, guardando la hora UTC en vez de la de Colombia
+   (desfase de 5 horas). Generarla acá evita ese problema de raíz. */
+const nowBogota = () => {
+  const parts = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'America/Bogota',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false
+  }).formatToParts(new Date());
+  const get = (type) => parts.find((p) => p.type === type).value;
+  return `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')}:${get('second')}`;
+};
+
 exports.createSaleWithDetails = async (pool, { persona, detalles, canalVenta, medioPago, referencia, fecha, asesorId }) => {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
 
     const personaDocumento = await saveOrUpdatePersonaWithConnection(connection, persona);
+    const fechaVenta = nowBogota();
 
     const totalValue = detalles.reduce((sum, item) => {
       const cantidad = Number(item.cantidad) || 0;
@@ -111,15 +129,15 @@ exports.createSaleWithDetails = async (pool, { persona, detalles, canalVenta, me
 
     const [logResult] = await connection.execute(
       `INSERT INTO praessia.logventa
-       (fecha, valor, asesor)
-       VALUES (?, ?, ?)`,
-      [fecha || new Date(), totalValue, asesorId]
+       (fecha, valor, asesor, documento)
+       VALUES (?, ?, ?, ?)`,
+      [fechaVenta, totalValue, asesorId, personaDocumento]
     );
 
     const idVenta = logResult.insertId;
     const detailValues = detalles.map((item) => [
       idVenta,
-      fecha || new Date(),
+      fechaVenta,
       Number(item.referencia) || 0,
       item.cantidad,
       canalVenta || '',

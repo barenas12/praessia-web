@@ -118,7 +118,7 @@ async function guardarRecarga() {
 
 async function detectApiBase() {
     if (window._API_BASE) return window._API_BASE;
-    const ports = Array.from({ length: 10 }, (_, i) => 3001 + i);
+    const ports = Array.from({ length: 10 }, (_, i) => 3008 + i);
     for (const p of ports) {
         try {
             const controller = new AbortController();
@@ -138,8 +138,8 @@ async function detectApiBase() {
             // ignore and try next port
         }
     }
-    // Fallback to port 3001
-    const fallback = 'http://localhost:3001';
+    // Fallback to port 3008
+    const fallback = 'http://localhost:3008';
     window._API_BASE = fallback;
     return fallback;
 }

@@ -179,45 +179,33 @@ async function fetchBackendProducts() {
     const text = await res.text();
     const payload = (() => { try { return text ? JSON.parse(text) : {}; } catch (e) { return {}; } })();
     if (!payload.success) return;
-    // Map to expected `perfumes` shape used by admin-sales-flow
-    window.perfumes = (payload.data || []).map(p => ({ id: p.id, name: p.fragancia || p.producto || '', valor_unitario: p.valor_unitario || p.costoVenta || 0 }));
+    // NOTA: se guarda en window.saleProducts (NO en `perfumes`), porque
+    // data-perfumes.js ya declara `const perfumes` a nivel global (catálogo
+    // estático del quiz, sin estado ni costoVenta). Sobrescribir
+    // `window.perfumes` no cambia lo que lee ese `const`, así que el
+    // formulario de venta terminaba usando siempre el catálogo del quiz.
+    window.saleProducts = (payload.data || []).map(p => ({ id: p.id, name: p.fragancia || p.producto || '', valor_unitario: p.valor_unitario || p.costoVenta || 0 }));
 
-    // Update existing select rows
+    // Update existing select rows (preserva selección y sincroniza precio)
     document.querySelectorAll('select[id^="saleProduct-"]').forEach(sel => {
       const id = sel.id.replace('saleProduct-', '');
       if (typeof fillSaleSelectForRow === 'function') {
         try { fillSaleSelectForRow(id); } catch (e) {}
       }
-      // If there's a selected value, fill price and readonly
-      const selected = sel.value;
-      if (selected) {
-        const prod = window.perfumes.find(x => String(x.id) === String(selected));
-        if (prod) {
-          const priceEl = document.getElementById(`salePrice-${id}`);
-          if (priceEl) { priceEl.value = prod.valor_unitario || 0; priceEl.readOnly = true; }
-        }
-      }
     });
 
-    // Delegate change to set price automatically
-    document.addEventListener('change', function (e) {
-      const t = e.target;
-      if (!t || !t.id) return;
-      if (t.id.startsWith('saleProduct-')) {
+    // Delegar el evento 'change' para fijar el precio automáticamente.
+    // Se registra una sola vez por carga de página, sin importar cuántas
+    // veces se llame fetchBackendProducts() (evita listeners duplicados).
+    if (!window.__salePriceChangeListenerBound) {
+      window.__salePriceChangeListenerBound = true;
+      document.addEventListener('change', function (e) {
+        const t = e.target;
+        if (!t || !t.id || !t.id.startsWith('saleProduct-')) return;
         const rid = t.id.replace('saleProduct-', '');
-        const prod = window.perfumes.find(x => String(x.id) === String(t.value));
-        const priceEl = document.getElementById(`salePrice-${rid}`);
-        if (prod && priceEl) {
-          priceEl.value = prod.valor_unitario || 0;
-          priceEl.readOnly = true;
-          updateRowTotal(rid);
-          updateSummaryTable();
-        } else if (priceEl) {
-          priceEl.value = '';
-          priceEl.readOnly = false;
-        }
-      }
-    });
+        if (typeof setSalePriceFromProduct === 'function') setSalePriceFromProduct(rid);
+      });
+    }
 
   } catch (e) {
     console.warn('Error loading products', e);

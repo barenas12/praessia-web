@@ -28,7 +28,7 @@ DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=tu_contraseña
 DB_NAME=praessia
-PORT=3001
+PORT=3008
 ```
 
 ### 3. Instalar dependencias
@@ -119,7 +119,7 @@ Obtener todas las recargas (últimas 100).
 ### Con curl:
 
 ```bash
-curl -X POST http://localhost:3001/supply-recharge \
+curl -X POST http://localhost:3008/supply-recharge \
   -H "Content-Type: application/json" \
   -d '{
     "fecha": "2024-05-30",
@@ -133,7 +133,7 @@ curl -X POST http://localhost:3001/supply-recharge \
 ```
 
 ### Con Postman:
-1. Crea una request POST a `http://localhost:3001/supply-recharge`
+1. Crea una request POST a `http://localhost:3008/supply-recharge`
 2. Configura el Body como JSON raw
 3. Pega el JSON de ejemplo
 4. Click en Send
@@ -172,5 +172,5 @@ back/
 - Los CORS ya están habilitados en `server.js`
 
 **El servidor no inicia**
-- Verifica que el puerto 3001 está disponible
+- Verifica que el puerto 3008 está disponible
 - O cambia el puerto en `.env`: `PORT=3000` (o cualquier otro puerto libre)
