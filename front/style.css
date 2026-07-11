@@ -90,7 +90,7 @@ body {
 /*tipografía Kiona*/
 @font-face {
     font-family: "Kiona";
-    src: url("/fonts/Kiona-Regular.ttf") format("truetype");
+    src: url("/assets/fonts/Kiona-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -108,7 +108,7 @@ header {
 /* Tipografía Heebo */
 @font-face {
     font-family: "Heebo";
-    src: url("/fonts/Heebo-VariableFont_wght.ttf") format("truetype");
+    src: url("/assets/fonts/Heebo-VariableFont_wght.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -831,7 +831,7 @@ html {
    =============================== */
 
 .citrica-bg {
-  background-image: url("/img/citrica.png");
+  background-image: url("/assets/img/citrica.png");
 }
 
 @media (max-width: 900px) {
@@ -850,7 +850,7 @@ html {
   }
 }
 
-.floral-bg { background-image: url("/img/floral.png"); }
+.floral-bg { background-image: url("/assets/img/floral.png"); }
 
 /* ===============================
    NOTAS DENTRO DEL BLOQUE
@@ -946,7 +946,7 @@ html {
       rgba(250,249,247,0.35) 68%,
       rgba(250,249,247,0) 100%
     ),
-    url("/img/citrica.webp");
+    url("/assets/img/citrica.webp");
 }
 
 /* ================================
@@ -960,7 +960,7 @@ html {
       rgba(250,249,247,0.32) 68%,
       rgba(250,249,247,0) 100%
     ),
-    url("/img/floral.webp");
+    url("/assets/img/floral.webp");
 }
 
 /* ================================
@@ -974,7 +974,7 @@ html {
       rgba(245,244,242,0.45) 70%,
       rgba(245,244,242,0) 100%
     ),
-    url("/img/amaderada.webp");
+    url("/assets/img/amaderada.webp");
 }
 
 /* ================================
@@ -988,7 +988,7 @@ html {
       rgba(238,235,230,0.5) 72%,
       rgba(238,235,230,0) 100%
     ),
-    url("/img/oriental.webp");
+    url("/assets/img/oriental.webp");
 }
 
 /* ================================
@@ -1002,7 +1002,7 @@ html {
       rgba(246,247,245,0.4) 70%,
       rgba(246,247,245,0) 100%
     ),
-    url("/img/fougere.webp");
+    url("/assets/img/fougere.webp");
 }
 
 /* ================================
@@ -1016,7 +1016,7 @@ html {
       rgba(240,238,235,0.55) 75%,
       rgba(240,238,235,0) 100%
     ),
-    url("/img/chipre.webp");
+    url("/assets/img/chipre.webp");
 }
 
 /* ================================
@@ -1030,7 +1030,7 @@ html {
       rgba(232,230,226,0.6) 78%,
       rgba(232,230,226,0) 100%
     ),
-    url("/img/cuero.webp");
+    url("/assets/img/cuero.webp");
 }
 
 /* ================================
@@ -1044,7 +1044,7 @@ html {
       rgba(248,244,238,0.48) 72%,
       rgba(248,244,238,0) 100%
     ),
-    url("/img/gourmand.webp");
+    url("/assets/img/gourmand.webp");
 }
 
 
@@ -1435,7 +1435,7 @@ html {
 .about-image-layer {
   position: absolute;
   inset: 0;
-  background-image: url("/img/quienes_somos.jpg");
+  background-image: url("/assets/img/quienes_somos.jpg");
   background-size: cover;
   background-position: center;
   opacity: 0.12;
@@ -1503,7 +1503,7 @@ html {
 }
 
 .about-image-layer {
-  background-image: url("/img/quienes_somos.jpg");
+  background-image: url("/assets/img/quienes_somos.jpg");
   background-size: cover;
   background-position: center;
   opacity: 0.12;
@@ -1515,7 +1515,7 @@ html {
 .about-image-layer {
   position: absolute;
   inset: 0;
-  background-image: url("/img/quienes_somos.jpg");
+  background-image: url("/assets/img/quienes_somos.jpg");
   background-size: cover;
   background-position: center;
   opacity: 0.08;          /* ⬅️ súbela */

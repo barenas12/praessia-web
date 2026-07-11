@@ -19,7 +19,7 @@ exports.saveSupplyRecharge = async (req, res) => {
     try {
       /* Insertar en base de datos */
       const query = `
-        INSERT INTO praessia.recargainsumos (fecha, insumo, cantidad, tipoDato, costo, proveedor, notas)
+        INSERT INTO recargainsumos (fecha, insumo, cantidad, tipoDato, costo, proveedor, notas)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
 
@@ -62,7 +62,7 @@ exports.getSupplyRecharge = async (req, res) => {
 
     try {
       const [rows] = await connection.execute(
-        'SELECT * FROM praessia.recargainsumos ORDER BY created_at DESC LIMIT 100'
+        'SELECT * FROM recargainsumos ORDER BY created_at DESC LIMIT 100'
       );
 
       res.json({
@@ -92,7 +92,7 @@ exports.getSuppliers = async (req, res) => {
 
     try {
       const [rows] = await connection.execute(
-        'SELECT id, proveedor FROM praessia.proveedores WHERE estado = 1 ORDER BY proveedor ASC'
+        'SELECT id, proveedor FROM proveedores WHERE estado = 1 ORDER BY proveedor ASC'
       );
 
       res.json({
@@ -121,7 +121,7 @@ exports.getFragrances = async (req, res) => {
     const connection = await pool.getConnection();
     try {
       const [rows] = await connection.execute(
-        'SELECT id, insumo FROM praessia.inventario WHERE estado = 1 ORDER BY insumo ASC'
+        'SELECT id, insumo FROM inventario WHERE estado = 1 ORDER BY insumo ASC'
       );
         res.json({
         success: true,

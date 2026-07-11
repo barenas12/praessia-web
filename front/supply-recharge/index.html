@@ -157,7 +157,7 @@
     </style>
 </head>
 
-<body onload="cargarProveedores()">
+<body>
     <aside class="admin-sidebar">
 
         <div class="sidebar-brand">
@@ -172,7 +172,7 @@
             </button>
 
             <div class="nav-section-label">Inventario</div>
-            <a class="sidebar-link" href="/front/admin/index.html">
+            <a class="sidebar-link" href="/admin/">
                 <i class="bi bi-grid-1x2"></i> Dashboard
             </a>
             <button class="sidebar-link" data-section="produccion">
@@ -233,7 +233,7 @@
                         Insumo <span class="req">*</span>
                     </label>
                     <select id="insumo" name="insumo" class="field-select" required>
-                        <option value="">Cargando insumos…</option>
+                        <option value="" disabled selected>Seleccione Insumo</option>
                     </select>
                     <span class="field-required-note" id="errorInsumo">Selecciona un insumo.</span>
                 </div>
@@ -290,7 +290,7 @@
                         Proveedor <span class="req">*</span>
                     </label>
                     <select id="proveedor" class="field-select" required>
-                        <option value="">Cargando proveedores…</option>
+                        <option value="" disabled selected>Seleccione Proveedor</option>
                     </select>
                     <span class="field-required-note" id="errorProveedor">Selecciona un proveedor.</span>
                 </div>

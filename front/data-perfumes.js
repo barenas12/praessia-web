@@ -8,7 +8,7 @@ const perfumes = [
   {
     id: "praessia-01",
     name: "Inspiración Olfativa: One Million",
-    image: "/img/perfumes/one_million.webp",
+    image: "/assets/img/perfumes/one_million.webp",
     personalities: {
       fresco_vital: 4,
       libre_natural: 2,
@@ -24,7 +24,7 @@ const perfumes = [
   {
     id: "praessia-02",
     name: "Inspiración Olfativa: 212 VIP",
-    image: "/img/perfumes/212_vip_men.webp",
+    image: "/assets/img/perfumes/212_vip_men.webp",
     personalities: {
       fresco_vital: 5,
       libre_natural: 4,

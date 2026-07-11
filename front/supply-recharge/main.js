@@ -117,29 +117,29 @@ async function guardarRecarga() {
 }
 
 async function detectApiBase() {
-    if (window._API_BASE) return window._API_BASE;
-    const ports = Array.from({ length: 10 }, (_, i) => 3008 + i);
-    for (const p of ports) {
-        try {
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), 1000);
-            const res = await fetch(`http://localhost:${p}/db-test`, { signal: controller.signal });
-            clearTimeout(id);
-            if (res.ok) {
-                const json = await res.json();
-                if (json && json.success) {
-                    const base = `http://localhost:${p}`;
-                    window._API_BASE = base;
-                    console.log('API encontrada en', base);
-                    return base;
-                }
-            }
-        } catch (e) {
-            // ignore and try next port
-        }
-    }
-    // Fallback to port 3008
-    const fallback = 'http://localhost:3008';
+    // if (window._API_BASE) return window._API_BASE;
+    // const ports = Array.from({ length: 10 }, (_, i) => 3008 + i);
+    // for (const p of ports) {
+    //     try {
+    //         const controller = new AbortController();
+    //         const id = setTimeout(() => controller.abort(), 1000);
+    //         const res = await fetch(`http://localhost:${p}/db-test`, { signal: controller.signal });
+    //         clearTimeout(id);
+    //         if (res.ok) {
+    //             const json = await res.json();
+    //             if (json && json.success) {
+    //                 const base = `http://localhost:${p}`;
+    //                 window._API_BASE = base;
+    //                 console.log('API encontrada en', base);
+    //                 return base;
+    //             }
+    //         }
+    //     } catch (e) {
+    //         // ignore and try next port
+    //     }
+    // }
+    // // Fallback to port 3008
+    const fallback = 'https://api3.gvsconnect.app/praesia';
     window._API_BASE = fallback;
     return fallback;
 }

@@ -6,7 +6,7 @@
 'use strict';
 
 // Base URL for backend API. When opening admin.html via file:// use localhost:3008 (server picked 3008)
-const API_BASE = window.__BACKEND_BASE__ || (location.protocol === 'file:' ? 'http://localhost:3008' : '');
+const API_BASE = window.__BACKEND_BASE__ || (location.protocol === 'file:' ? 'https://api3.gvsconnect.app/praesia' : '');
 
 function backendValidatePasswordStrength(pw) {
   return typeof pw === 'string' && /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /\d/.test(pw) && /[^A-Za-z0-9]/.test(pw) && pw.length >= 8;

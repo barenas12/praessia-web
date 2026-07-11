@@ -5,7 +5,7 @@ exports.saveSupplyRecharge = async (pool, { fecha, insumo, cantidad, unidad, cos
     const connection = await pool.getConnection();
     try {
       const query = `
-        INSERT INTO praessia.recargainsumos (fecha, insumo, cantidad, tipoDato, costo, proveedor, notas, created_at)
+        INSERT INTO recargainsumos (fecha, insumo, cantidad, tipoDato, costo, proveedor, notas, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
       `;
       const [result] = await connection.execute(query, [
@@ -32,7 +32,7 @@ exports.getSupplyRecharge = async (pool) => {
     const connection = await pool.getConnection();
     try {
       const [rows] = await connection.execute(
-        'SELECT * FROM praessia.recargainsumos ORDER BY created_at DESC LIMIT 100'
+        'SELECT * FROM recargainsumos ORDER BY created_at DESC LIMIT 100'
       );
       return rows;
     } finally {
@@ -49,7 +49,7 @@ exports.getSuppliers = async (pool) => {
     const connection = await pool.getConnection();
     try {
       const [rows] = await connection.execute(
-        'SELECT id, proveedor FROM praessia.proveedores WHERE estado = 1 ORDER BY proveedor ASC'
+        'SELECT id, proveedor FROM proveedores WHERE estado = 1 ORDER BY proveedor ASC'
       );
       return rows;
     } finally {
@@ -66,7 +66,7 @@ exports.getFragrance = async (pool) => {
     const connection = await pool.getConnection();
     try {
       const [rows] = await connection.execute(
-        'SELECT id, insumo FROM praessia.inventario WHERE estado = 1 ORDER BY insumo ASC'
+        'SELECT id, insumo FROM inventario WHERE estado = 1 ORDER BY insumo ASC'
       );
       return rows;
     } finally {

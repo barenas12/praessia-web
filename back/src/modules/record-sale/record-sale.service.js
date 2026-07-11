@@ -2,7 +2,7 @@ exports.findPersonaByDocumento = async (pool, documento) => {
   const connection = await pool.getConnection();
   try {
     const [rows] = await connection.execute(
-      'SELECT * FROM praessia.persona WHERE documento = ? LIMIT 1',
+      'SELECT * FROM persona WHERE documento = ? LIMIT 1',
       [documento]
     );
     return rows[0] || null;
@@ -26,7 +26,7 @@ const buildPersonaFields = (persona) => ({
 
 const saveOrUpdatePersonaWithConnection = async (connection, persona) => {
   const [existingRows] = await connection.execute(
-    'SELECT documento FROM praessia.persona WHERE documento = ? LIMIT 1',
+    'SELECT documento FROM persona WHERE documento = ? LIMIT 1',
     [persona.documento]
   );
 
@@ -34,7 +34,7 @@ const saveOrUpdatePersonaWithConnection = async (connection, persona) => {
 
   if (existingRows.length > 0) {
     await connection.execute(
-      `UPDATE praessia.persona
+      `UPDATE persona
          SET tipoDocumento = ?, nombre = ?, apellido = ?, telefono = ?, correo = ?, departamento = ?, municipio = ?, direccion = ?, barrio = ?, informacionAdicional = ?
          WHERE documento = ?`,
       [
@@ -55,7 +55,7 @@ const saveOrUpdatePersonaWithConnection = async (connection, persona) => {
   }
 
   await connection.execute(
-    `INSERT INTO praessia.persona
+    `INSERT INTO persona
        (documento, tipoDocumento, nombre, apellido, telefono, correo, departamento, municipio, direccion, barrio, informacionAdicional)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
@@ -88,7 +88,7 @@ exports.findActiveProducts = async (pool) => {
   const connection = await pool.getConnection();
   try {
     const [rows] = await connection.execute(
-      'SELECT id, producto AS fragancia, costoVenta AS valor_unitario FROM praessia.producto WHERE estado = 1 ORDER BY producto ASC'
+      'SELECT id, producto AS fragancia, costoVenta AS valor_unitario FROM producto WHERE estado = 1 ORDER BY producto ASC'
     );
     return rows;
   } finally {
@@ -128,7 +128,7 @@ exports.createSaleWithDetails = async (pool, { persona, detalles, canalVenta, me
     }, 0);
 
     const [logResult] = await connection.execute(
-      `INSERT INTO praessia.logventa
+      `INSERT INTO logventa
        (fecha, valor, asesor, documento)
        VALUES (?, ?, ?, ?)`,
       [fechaVenta, totalValue, asesorId, personaDocumento]
@@ -148,7 +148,7 @@ exports.createSaleWithDetails = async (pool, { persona, detalles, canalVenta, me
 
     if (detailValues.length > 0) {
       await connection.query(
-        `INSERT INTO praessia.ventas
+        `INSERT INTO ventas
          (idVenta, fecha, referencia, cantidad, canalVenta, medioPago, valor, asesor)
          VALUES ?`,
         [detailValues]

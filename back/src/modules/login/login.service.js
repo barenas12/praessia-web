@@ -6,7 +6,7 @@ exports.findUserByUsuario = async (pool, usuario) => {
   const connection = await pool.getConnection();
   try {
     const [rows] = await connection.execute(
-      'SELECT id, usuario, password, actualizarContrasena FROM praessia.usuario WHERE usuario = ? LIMIT 1',
+      'SELECT id, usuario, password, actualizarContrasena FROM usuario WHERE usuario = ? LIMIT 1',
       [usuario]
     );
     return rows[0] || null;
@@ -19,7 +19,7 @@ exports.updateUserPassword = async (pool, usuario, hashedPassword) => {
   const connection = await pool.getConnection();
   try {
     await connection.execute(
-      'UPDATE praessia.usuario SET password = ?, actualizarContrasena = 0 WHERE usuario = ?',
+      'UPDATE usuario SET password = ?, actualizarContrasena = 0 WHERE usuario = ?',
       [hashedPassword, usuario]
     );
   } finally {
