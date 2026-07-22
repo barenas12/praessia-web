@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Praessia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+    <style>
+        /* ── Variables ───────────────────────────────────────── */
+        :root {
+            --wine: #6a2831;
+            --wine-dark: #4e1e25;
+            --wine-light: #8a3040;
+            --gold: #d4af37;
+            --gold-soft: #bfa76a;
+            --cream: #F0E7DA;
+            --bg: #f6f3ee;
+            --white: #ffffff;
+            --text: #2b2b2b;
+            --muted: #7a7a7a;
+            --border: #e2ddd4;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            --trans: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --green: #2d7a4f;
+            --red: #c0392b;
+            --yellow: #e67e22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+
+        /* ── Pantalla de login ───────────────────────────────── */
+        #loginScreen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 60%, #8a3040 100%);
+            padding: 20px;
+        }
+
+        .login-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .login-logo {
+            font-family: 'Kiona', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 0.14em;
+            color: var(--wine);
+            margin-bottom: 4px;
+        }
+
+        .login-subtitle {
+            font-size: 0.78rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
+            margin-bottom: 32px;
+        }
+
+        .login-field {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .login-field i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 13px 14px 13px 42px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.95rem;
+            background: var(--bg);
+            outline: none;
+            transition: var(--trans);
+        }
+
+        .login-input:focus {
+            border-color: var(--gold-soft);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: var(--wine);
+            color: var(--cream);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 13px;
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: var(--trans);
+            margin-top: 8px;
+        }
+
+        .btn-login:hover {
+            background: var(--wine-light);
+        }
+
+        .login-error {
+            color: var(--red);
+            font-size: 0.82rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* ── Layout principal ────────────────────────────────── */
+        #adminPanel {
+            display: none;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 240px;
+            background: var(--wine-dark);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+            transition: var(--trans);
+        }
+
+        .sidebar-brand {
+            padding: 28px 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-brand-name {
+            font-family: 'Kiona', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.12em;
+            color: var(--cream);
+        }
+
+        .sidebar-brand-sub {
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(212, 175, 55, 0.7);
+            margin-top: 2px;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 12px 12px 6px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--trans);
+            margin-bottom: 2px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-link i {
+            font-size: 1rem;
+            width: 20px;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cream);
+        }
+
+        .sidebar-link.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold);
+        }
+
+        .sidebar-badge {
+            margin-left: auto;
+            background: var(--gold);
+            color: var(--wine-dark);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 50px;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.82rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: var(--trans);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            width: 100%;
+        }
+
+        .btn-logout:hover {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Contenido principal */
+        .admin-main {
+            flex: 1;
+            margin-left: 240px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .admin-topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-title {
+            font-family: 'Kiona', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.06em;
+            color: var(--wine);
+        }
+
+        .topbar-date {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .admin-content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        /* ── Secciones ───────────────────────────────────────── */
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        /* ── Cards métricas ──────────────────────────────────── */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .metric-icon.wine {
+            background: rgba(106, 40, 49, 0.1);
+            color: var(--wine);
+        }
+
+        .metric-icon.gold {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+        }
+
+        .metric-icon.green {
+            background: rgba(45, 122, 79, 0.1);
+            color: var(--green);
+        }
+
+        .metric-icon.red {
+            background: rgba(192, 57, 43, 0.1);
+            color: var(--red);
+        }
+
+        .metric-value {
+            font-family: 'Kiona', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* ── Semáforo inventario ─────────────────────────────── */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .inv-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .inv-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .inv-card-name {
+            font-size: 0.82rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .semaforo {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .semaforo.green {
+            background: #27ae60;
+            box-shadow: 0 0 6px rgba(39, 174, 96, 0.5);
+        }
+
+        .semaforo.yellow {
+            background: #f39c12;
+            box-shadow: 0 0 6px rgba(243, 156, 18, 0.5);
+        }
+
+        .semaforo.red {
+            background: #e74c3c;
+            box-shadow: 0 0 6px rgba(231, 76, 60, 0.5);
+        }
+
+        .inv-card-qty {
+            font-family: 'Kiona', sans-serif;
+            font-size: 1.6rem;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .inv-card-unit {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* Barra de progreso stock */
+        .inv-bar-wrap {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .inv-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .inv-bar.green {
+            background: #27ae60;
+        }
+
+        .inv-bar.yellow {
+            background: #f39c12;
+        }
+
+        .inv-bar.red {
+            background: #e74c3c;
+        }
+
+        .inv-card-alert {
+            font-size: 0.72rem;
+            color: var(--red);
+            display: none;
+        }
+
+        .inv-card-alert.visible {
+            display: block;
+        }
+
+        /* ── Tablas ──────────────────────────────────────────── */
+        .admin-table-wrap {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .admin-table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .admin-table-title {
+            font-family: 'Kiona', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            color: var(--wine);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            background: var(--bg);
+            padding: 12px 16px;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .admin-table td {
+            padding: 14px 16px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .admin-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .admin-table tr:hover td {
+            background: #fafaf8;
+        }
+
+        /* ── Botones ─────────────────────────────────────────── */
+        .btn-pr {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: var(--radius-sm);
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--trans);
+            border: none;
+            letter-spacing: 0.04em;
+        }
+
+        .btn-pr-wine {
+            background: var(--wine);
+            color: var(--cream);
+        }
+
+        .btn-pr-wine:hover {
+            background: var(--wine-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-pr-gold {
+            background: var(--gold);
+            color: var(--wine-dark);
+        }
+
+        .btn-pr-gold:hover {
+            background: #c9a430;
+            transform: translateY(-1px);
+        }
+
+        .btn-pr-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-pr-outline:hover {
+            border-color: var(--wine);
+            color: var(--wine);
+        }
+
+        .btn-pr-green {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .btn-pr-green:hover {
+            background: #236040;
+        }
+
+        .btn-pr-red {
+            background: var(--red);
+            color: #fff;
+        }
+
+        .btn-pr-red:hover {
+            background: #a93226;
+        }
+
+        .btn-pr-sm {
+            padding: 6px 12px;
+            font-size: 0.78rem;
+        }
+
+        /* ── Formularios ─────────────────────────────────────── */
+        .admin-form-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .admin-form-title {
+            font-family: 'Kiona', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            color: var(--wine);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .field-input,
+        .field-select,
+        .field-textarea {
+            padding: 10px 13px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.9rem;
+            background: var(--bg);
+            color: var(--text);
+            outline: none;
+            transition: var(--trans);
+            width: 100%;
+        }
+
+        .field-input:focus,
+        .field-select:focus,
+        .field-textarea:focus {
+            border-color: var(--gold-soft);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .field-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .sale-form-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .sale-form-main {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-section {
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .form-section-title {
+            font-size: 0.78rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--wine);
+            margin-bottom: 14px;
+        }
+
+        .sale-summary-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 22px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.04);
+        }
+
+        .summary-header {
+            font-size: 0.82rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--wine);
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .summary-item.total {
+            margin-top: 10px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .summary-note {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-top: 14px;
+            line-height: 1.5;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-row .btn-pr {
+            min-width: 220px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           VENTAS v2 — pegar en el <style> de admin.html,
+           después del bloque existente de .sale-form-grid
+           ═══════════════════════════════════════════════ */
+
+        /* Cabecera de sección dentro del formulario */
+        .sale-section-header {
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--wine);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Grid de fila proporcional (se define inline con style="grid-template-columns:...") */
+        .sale-form-row {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        /* ── Layout paso 2: form + sidebar resumen ── */
+        .sale-detail-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr);
+            gap: 28px;
+            align-items: start;
+        }
+
+        .sale-detail-main {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* ── Sidebar resumen ── */
+        .sale-summary-sidebar {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            position: sticky;
+            top: 80px;
+        }
+
+        .summary-card-title {
+            font-family: 'Kiona', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            color: var(--wine);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-table td {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .summary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .summary-grand-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 2px solid var(--border);
+            font-family: 'Kiona', sans-serif;
+            font-size: 0.95rem;
+            color: var(--wine);
+        }
+
+        /* ── Filas de producto ── */
+        .product-row-header {
+            display: flex;
+            gap: 12px;
+            padding: 0 0 8px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .product-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Botón eliminar fila */
+        .btn-remove-product {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--muted);
+            width: 32px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--trans);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .btn-remove-product:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: rgba(192, 57, 43, 0.06);
+        }
+
+        /* Botón añadir producto */
+        .btn-add-product {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 1px dashed var(--gold-soft);
+            color: var(--gold-soft);
+            border-radius: var(--radius-sm);
+            padding: 8px 16px;
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: var(--trans);
+            margin-top: 10px;
+            letter-spacing: 0.04em;
+        }
+
+        .btn-add-product:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.06);
+        }
+
+        /* ── Navegación entre pasos ── */
+        .btn-step-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-next {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 22px;
+            background: var(--wine);
+            color: var(--cream);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.88rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: var(--trans);
+        }
+
+        .btn-next:hover {
+            background: var(--wine-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-prev {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Heebo', sans-serif;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: var(--trans);
+        }
+
+        .btn-prev:hover {
+            border-color: var(--wine);
+            color: var(--wine);
+        }
+
+        /* ── Stepper ── */
+        .sales-stepper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .stepper-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stepper-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--trans);
+        }
+
+        .stepper-step.active .stepper-dot {
+            background: var(--wine);
+            color: var(--cream);
+        }
+
+        .stepper-step.completed .stepper-dot {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .stepper-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+        }
+
+        .stepper-step.active .stepper-label {
+            color: var(--wine);
+            font-weight: 600;
+        }
+
+        .stepper-step.completed .stepper-label {
+            color: var(--green);
+        }
+
+        /* ── Label asterisco obligatorio ── */
+        .field-label.required::after {
+            content: ' *';
+            color: var(--wine);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .sale-detail-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sale-summary-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sale-form-row {
+                grid-template-columns: 1fr !important;
+            }
+
+            .product-row {
+                flex-wrap: wrap;
+            }
+
+            .product-row-header {
+                display: none;
+            }
+        }
+
+        /* ── Historial ───────────────────────────────────────── */
+        .history-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .history-dot.in {
+            background: var(--green);
+        }
+
+        .history-dot.out {
+            background: var(--red);
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-title {
+            font-size: 0.88rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .history-meta {
+            font-size: 0.76rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .history-amount {
+            font-family: 'Kiona', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .history-amount.in {
+            color: var(--green);
+        }
+
+        .history-amount.out {
+            color: var(--red);
+        }
+
+        /* ── Toast ───────────────────────────────────────────── */
+        .admin-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--wine-dark);
+            color: var(--cream);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .admin-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Responsive ──────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-layout {
+                flex-direction: column;
+            }
+
+            .admin-content {
+                padding: 20px 16px;
+            }
+
+            .admin-topbar {
+                padding: 14px 16px;
+            }
+        }
+
+        /* Stars display */
+        .stars-gold {
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        /* Sección insumos manuales */
+        .manual-supply-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .manual-supply-row:last-child {
+            border-bottom: none;
+        }
+
+        .manual-supply-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .manual-supply-meta {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .manual-supply-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-inline {
+            width: 80px;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            text-align: center;
+            outline: none;
+            background: var(--bg);
+            transition: var(--trans);
+        }
+
+        .qty-inline:focus {
+            border-color: var(--gold-soft);
+            background: var(--white);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+
+                <!-- LOGO IZQUIERDA -->
+                <div class="col-auto">
+                    <img src="/assets/img/imagotipo.svg" alt="Praessia logo" class="logo">
+                </div>
+
+                <!-- NAV DERECHA -->
+                <div class="col">
+                    <nav class="nav-container">
+                        <ul class="nav-menu">
+                            <li><a href="/">Inicio</a></li>
+                            <li><a href="/store">Tienda</a></li>
+                            <li><a href="/about-us/">¿Quiénes somos?</a></li>
+                            <li><a href="/admin/">Ingresar</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    <!-- ═══════════════════════════════════════════════
+     PANTALLA DE LOGIN
+════════════════════════════════════════════════ -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <p class="login-logo">PRAESSIA</p>
+            <p class="login-subtitle">Panel de administración</p>
+
+            <div class="login-field">
+                <i class="bi bi-lock"></i>
+                <input type="text" id="loginUser" class="login-input" placeholder="Usuario" autocomplete="username"
+                    style="margin-bottom:8px;">
+                <input type="password" id="loginInput" class="login-input" placeholder="Contraseña"
+                    autocomplete="current-password">
+            </div>
+
+            <button class="btn-login" id="btnLogin">
+                Ingresar
+            </button>
+
+            <p class="login-error" id="loginError">
+                <i class="bi bi-exclamation-circle me-1"></i>Contraseña incorrecta
+            </p>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     PANEL ADMIN
+════════════════════════════════════════════════ -->
+    <div id="adminPanel">
+        <div class="admin-layout">
+
+            <!-- SIDEBAR -->
+            <aside class="admin-sidebar">
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-name">PRAESSIA</div>
+                    <div class="sidebar-brand-sub">Admin</div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="nav-section-label">General</div>
+                    <button class="sidebar-link active" data-section="dashboard">
+                        <i class="bi bi-grid-1x2"></i> Dashboard
+                    </button>
+
+                    <div class="nav-section-label">Inventario</div>
+                    <button class="sidebar-link" data-section="inventario">
+                        <i class="bi bi-boxes"></i> Stock insumos
+                    </button>
+                    <button class="sidebar-link" data-section="produccion">
+                        <i class="bi bi-droplet"></i> Producción
+                    </button>
+                    <a class="sidebar-link" href="/supply-recharge/">
+                        <i class="bi bi-grid-1x2"></i> Recargar insumos
+                    </a>
+
+                    <div class="nav-section-label">Ventas</div>
+                    <button class="sidebar-link" data-section="ventas">
+                        <i class="bi bi-bag-check"></i> Registrar venta
+                    </button>
+                    <button class="sidebar-link" data-section="historial">
+                        <i class="bi bi-clock-history"></i> Historial
+                    </button>
+
+                    <div class="nav-section-label">Tienda</div>
+                    <button class="sidebar-link" data-section="resenias">
+                        <i class="bi bi-chat-heart"></i> Reseñas
+                        <span class="sidebar-badge" id="pendingBadge" style="display:none">0</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <button class="btn-logout" id="btnLogout">
+                        <i class="bi bi-box-arrow-left"></i> Cerrar sesión
+                    </button>
+                </div>
+            </aside>
+
+            <!-- CONTENIDO -->
+            <main class="admin-main">
+
+                <!-- Topbar -->
+                <div class="admin-topbar">
+                    <span class="topbar-title" id="topbarTitle">Dashboard</span>
+                    <span class="topbar-date" id="topbarDate"></span>
+                </div>
+
+                <div class="admin-content">
+
+                    <!-- ══════════ DASHBOARD ══════════ -->
+                    <section class="admin-section active" id="section-dashboard">
+
+                        <div class="metrics-grid" id="metricsGrid">
+                            <!-- Se rellena por admin.js -->
+                        </div>
+
+                        <!-- Alertas de stock bajo -->
+                        <div class="admin-table-wrap" id="alertsWrap" style="margin-bottom:24px; display:none;">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title" style="color:var(--red);">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>Alertas de stock
+                                </span>
+                            </div>
+                            <div id="alertsList" style="padding:16px 24px;"></div>
+                        </div>
+
+                        <!-- Últimas ventas -->
+                        <div class="admin-table-wrap">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title">Últimas ventas</span>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Fragancia</th>
+                                            <th>Cantidad</th>
+                                            <th>Canal</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentSalesBody">
+                                        <tr>
+                                            <td colspan="5" class="empty-state">
+                                                <i class="bi bi-bag"
+                                                    style="font-size:1.5rem; opacity:0.3; display:block; margin-bottom:8px;"></i>
+                                                Sin ventas registradas aún
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ══════════ INVENTARIO ══════════ -->
+                    <section class="admin-section" id="section-inventario">
+
+                        <div class="inventory-grid" id="inventoryGrid">
+                            <!-- Semáforos generados por admin.js -->
+                        </div>
+
+                        <!-- Insumos manuales (alcohol, fijador, agua) -->
+                        <div class="admin-form-card">
+                            <div class="admin-form-title">
+                                <i class="bi bi-droplet me-2"></i>Insumos de producción manual
+                            </div>
+                            <div id="manualSuppliesList">
+                                <!-- Generado por admin.js -->
+                            </div>
+                        </div>
+
+                        <!-- Stock de esencias por referencia -->
+                        <div id="inventoryEssencesGrid"></div>
+
+                    </section>
+
+                    <!-- ══════════ PRODUCCIÓN ══════════ -->
+                    <section class="admin-section" id="section-produccion">
+
+                        <div class="admin-form-card">
+                            <div class="admin-form-title">
+                                <i class="bi bi-droplet me-2"></i>Registrar consumo de producción
+                            </div>
+                            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:20px;">
+                                Cuando elaboras un lote de perfumes, registra aquí cuánto alcohol, fijador y agua
+                                destilada utilizaste.
+                            </p>
+
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label class="field-label">Fecha de producción</label>
+                                    <input type="date" id="prodDate" class="field-input">
+                                </div>
+                                <div class="field-group">
+                                    <label class="field-label">Perfumes elaborados (unidades)</label>
+                                    <input type="number" id="prodUnits" class="field-input" min="1" placeholder="10">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label class="field-label">Alcohol usado (ml)</label>
+                                    <input type="number" id="prodAlcohol" class="field-input" min="0" placeholder="700">
+                                </div>
+                                <div class="field-group">
+                                    <label class="field-label">Fijador usado (ml)</label>
+                                    <input type="number" id="prodFijador" class="field-input" min="0" placeholder="50">
+                                </div>
+                                <div class="field-group">
+                                    <label class="field-label">Agua destilada usada (ml)</label>
+                                    <input type="number" id="prodAgua" class="field-input" min="0" placeholder="250">
+                                </div>
+                            </div>
+
+                            <div class="field-group" style="margin-bottom:20px;">
+                                <label class="field-label">Notas (opcional)</label>
+                                <textarea id="prodNotes" class="field-textarea"
+                                    placeholder="Observaciones del lote..."></textarea>
+                            </div>
+
+                            <button class="btn-pr btn-pr-wine" id="btnSaveProd">
+                                <i class="bi bi-save"></i> Guardar registro de producción
+                            </button>
+                        </div>
+
+                        <!-- Historial de producción -->
+                        <div class="admin-table-wrap">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title">Historial de producción</span>
+                            </div>
+                            <div id="prodHistory" style="padding: 8px 0;">
+                                <div class="empty-state">
+                                    <i class="bi bi-droplet"></i>
+                                    Sin registros de producción aún
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ══════════ RECARGA INSUMOS ══════════ -->
+                    <section class="admin-section" id="section-recarga">
+
+                        <div class="admin-form-card">
+                            <div class="admin-form-title">
+                                <i class="bi bi-plus-circle me-2"></i>Recargar insumos
+                            </div>
+                            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:20px;">
+                                Cuando compras o recibes material, añade las cantidades al stock actual.
+                            </p>
+
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label class="field-label">Insumo</label>
+                                    <select id="reloadItem" class="field-select">
+                                        <option value="">Selecciona insumo...</option>
+                                    </select>
+                                </div>
+                                <div class="field-group">
+                                    <label class="field-label">Cantidad a añadir</label>
+                                    <input type="number" id="reloadQty" class="field-input" min="1" placeholder="100">
+                                </div>
+                                <div class="field-group">
+                                    <label class="field-label">Costo (COP, opcional)</label>
+                                    <input type="number" id="reloadCost" class="field-input" min="0"
+                                        placeholder="50000">
+                                </div>
+                            </div>
+
+                            <div class="field-group" style="margin-bottom:20px;">
+                                <label class="field-label">Notas (proveedor, lote, etc.)</label>
+                                <input type="text" id="reloadNotes" class="field-input"
+                                    placeholder="Ej: Proveedor Aromas SAS, lote #12">
+                            </div>
+
+                            <button class="btn-pr btn-pr-wine" id="btnReload">
+                                <i class="bi bi-plus-circle"></i> Añadir al inventario
+                            </button>
+                        </div>
+
+                        <!-- Historial de recargas -->
+                        <div class="admin-table-wrap">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title">Historial de recargas</span>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Insumo</th>
+                                            <th>Cantidad</th>
+                                            <th>Costo</th>
+                                            <th>Notas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reloadHistoryBody">
+                                        <tr>
+                                            <td colspan="5">
+                                                <div class="empty-state">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                    Sin recargas registradas
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ══════════ REGISTRAR VENTA ══════════ -->
+                    <section class="admin-section" id="section-ventas">
+
+                        <div class="admin-form-card">
+                            <div class="admin-form-title">
+                                <i class="bi bi-bag-check me-2"></i>Registrar venta manual
+                            </div>
+                            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:24px;">
+                                Para ventas por redes sociales, WhatsApp o presencial.
+                            </p>
+
+                            <!-- Stepper -->
+                            <div class="sales-stepper">
+                                <div class="stepper-step active" id="stepper1">
+                                    <div class="stepper-dot">1</div>
+                                    <span class="stepper-label">Datos del cliente</span>
+                                </div>
+                                <div style="flex:1; height:2px; background:var(--border);"></div>
+                                <div class="stepper-step" id="stepper2">
+                                    <div class="stepper-dot">2</div>
+                                    <span class="stepper-label">Detalle de venta</span>
+                                </div>
+                            </div>
+
+                            <!-- ─── PASO 1: Información del cliente ─── -->
+                            <div id="step-1-client">
+
+                                <div class="sale-section-header">Información del cliente</div>
+
+                                <!-- Fila 1: Tipo doc (angosto) + Número doc (medio) -->
+                                <div class="sale-form-row"
+                                    style="grid-template-columns: 200px 1fr; margin-bottom:14px;">
+                                    <div class="field-group">
+                                        <label class="field-label required">Tipo de documento</label>
+                                        <select id="clientDocType" class="field-select" required>
+                                            <option value="">Selecciona...</option>
+                                            <option value="CC">Cédula de Ciudadanía</option>
+                                            <option value="CE">Cédula de Extranjería</option>
+                                            <option value="NIT">NIT</option>
+                                            <option value="PP">Pasaporte</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label required">Número de documento</label>
+                                        <input type="text" id="clientDoc" class="field-input"
+                                            placeholder="Ej: 1023456789" inputmode="numeric" pattern="[0-9]*"
+                                            oninput="this.value=this.value.replace(/\D/g,'')" maxlength="15" required>
+                                    </div>
+                                </div>
+
+                                <!-- Fila 2: Nombre + Apellido -->
+                                <div class="sale-form-row" style="grid-template-columns: 1fr 1fr; margin-bottom:14px;">
+                                    <div class="field-group">
+                                        <label class="field-label required">Nombre</label>
+                                        <input type="text" id="clientName" class="field-input" placeholder="Nombre"
+                                            required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label required">Apellido</label>
+                                        <input type="text" id="clientLastname" class="field-input"
+                                            placeholder="Apellido" required>
+                                    </div>
+                                </div>
+
+                                <!-- Fila 3: Teléfono (angosto) + Correo (ancho) -->
+                                <div class="sale-form-row"
+                                    style="grid-template-columns: 200px 1fr; margin-bottom:14px;">
+                                    <div class="field-group">
+                                        <label class="field-label required">Teléfono</label>
+                                        <input type="text" id="clientPhone" class="field-input"
+                                            placeholder="Ej: 3008234567" inputmode="numeric" pattern="[0-9]*"
+                                            oninput="this.value=this.value.replace(/\D/g,'')" maxlength="12" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label required">Correo electrónico</label>
+                                        <input type="email" id="clientEmail" class="field-input"
+                                            placeholder="cliente@ejemplo.com" required>
+                                        <span id="emailHint"
+                                            style="display:none; font-size:0.75rem; color:var(--red, #c0392b); margin-top:4px; letter-spacing:0.02em;"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Fila 4: Departamento + Municipio -->
+
+                                <div class="sale-form-row" style="grid-template-columns: 1fr 1fr; margin-bottom:14px;">
+                                    <div class="field-group">
+                                        <label class="field-label required">Departamento</label>
+                                        <select id="clientDepartment" class="field-select" required>
+                                            <option value="">Selecciona departamento...</option>
+                                            <option value="Amazonas">Amazonas</option>
+                                            <option value="Antioquia">Antioquia</option>
+                                            <option value="Arauca">Arauca</option>
+                                            <option value="Atlántico">Atlántico</option>
+                                            <option value="Bolívar">Bolívar</option>
+                                            <option value="Boyacá">Boyacá</option>
+                                            <option value="Caldas">Caldas</option>
+                                            <option value="Caquetá">Caquetá</option>
+                                            <option value="Casanare">Casanare</option>
+                                            <option value="Cauca">Cauca</option>
+                                            <option value="Cesar">Cesar</option>
+                                            <option value="Chocó">Chocó</option>
+                                            <option value="Córdoba">Córdoba</option>
+                                            <option value="Cundinamarca">Cundinamarca</option>
+                                            <option value="Guainía">Guainía</option>
+                                            <option value="Guaviare">Guaviare</option>
+                                            <option value="Huila">Huila</option>
+                                            <option value="La Guajira">La Guajira</option>
+                                            <option value="Magdalena">Magdalena</option>
+                                            <option value="Meta">Meta</option>
+                                            <option value="Nariño">Nariño</option>
+                                            <option value="Norte de Santander">Norte de Santander</option>
+                                            <option value="Putumayo">Putumayo</option>
+                                            <option value="Quindío">Quindío</option>
+                                            <option value="Risaralda">Risaralda</option>
+                                            <option value="San Andrés y Providencia">San Andrés y Providencia</option>
+                                            <option value="Santander">Santander</option>
+                                            <option value="Sucre">Sucre</option>
+                                            <option value="Tolima">Tolima</option>
+                                            <option value="Valle del Cauca">Valle del Cauca</option>
+                                            <option value="Vaupés">Vaupés</option>
+                                            <option value="Vichada">Vichada</option>
+                                            <option value="Bogotá D.C.">Bogotá D.C.</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label required">Municipio</label>
+                                        <select id="clientMunicipality" class="field-select" required>
+                                            <option value="">Selecciona primero el departamento...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Fila 5: Dirección (ancha) -->
+                                <div class="sale-form-row" style="grid-template-columns: 1fr; margin-bottom:14px;">
+                                    <div class="field-group">
+                                        <label class="field-label required">Dirección de entrega</label>
+                                        <input type="text" id="clientAddress" class="field-input"
+                                            placeholder="Ej: Calle 123 # 45-67, Apto 302" required>
+                                    </div>
+                                </div>
+
+                                <!-- Fila 6: Barrio (medio) + Info adicional (ancho) -->
+                                <div class="sale-form-row"
+                                    style="grid-template-columns: 220px 1fr; margin-bottom:14px;">
+                                    <div class="field-group">
+                                        <label class="field-label required">Barrio</label>
+                                        <input type="text" id="clientNeighborhood" class="field-input"
+                                            placeholder="Ej: El Poblado" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Información adicional <span
+                                                style="font-size:0.7rem; color:var(--muted); text-transform:none; letter-spacing:0;">(opcional)</span></label>
+                                        <input type="text" id="clientNotes" class="field-input"
+                                            placeholder="Apartamento, indicaciones, referencia...">
+                                    </div>
+                                </div>
+
+                                <div class="btn-step-nav" style="margin-top:20px;">
+                                    <button class="btn-next" id="btnStep1Continue" onclick="validateAndGoToStep2()">
+                                        Continuar <i class="bi bi-arrow-right"></i>
+                                    </button>
+                                </div>
+
+                            </div><!-- /step-1-client -->
+
+                            <!-- ─── PASO 2: Detalle + Comercial + Resumen ─── -->
+                            <div id="step-2-details" style="display:none;">
+
+                                <!-- Layout 2 columnas: form | resumen -->
+                                <div class="sale-detail-layout">
+
+                                    <!-- Columna izquierda: productos + comercial -->
+                                    <div class="sale-detail-main">
+
+                                        <div class="sale-section-header">Detalle de la venta</div>
+
+                                        <!-- Cabecera columnas tabla de productos -->
+                                        <!--<div class="product-row-header">
+                                            <span style="flex:2;">Fragancia</span>
+                                            <span style="flex:1;"> unitario</span>
+                                            <span style="flex:0.7;">Cant.</span>
+                                            <span style="flex:1;">Total fila</span>
+                                            <span style="flex:0; width:32px;"></span>
+                                        </div>-->
+
+                                        <div id="productsContainer"></div>
+
+                                        <button type="button" class="btn-add-product" id="btnAddProduct">
+                                            <i class="bi bi-plus-circle"></i> Añadir otro producto
+                                        </button>
+
+                                        <!-- Sección comercial -->
+                                        <div class="sale-section-header"
+                                            style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+                                            Información comercial
+                                        </div>
+
+                                        <div class="sale-form-row"
+                                            style="grid-template-columns: 1fr 1fr; margin-bottom:14px;">
+                                            <div class="field-group">
+                                                <label class="field-label required">Canal de venta</label>
+                                                <select id="saleChannel" class="field-select"
+                                                    onchange="toggleExternalSellerField()" required>
+                                                    <option value="">Selecciona canal...</option>
+                                                    <option value="instagram">Instagram</option>
+                                                    <option value="whatsapp">WhatsApp</option>
+                                                    <option value="presencial">Presencial / Voz a voz</option>
+                                                    <option value="vendedor_externo">Vendedor externo</option>
+                                                </select>
+                                            </div>
+                                            <div class="field-group" id="saleExternalSellerRow" style="display:none;">
+                                                <label class="field-label">Vendedor externo</label>
+                                                <select id="saleExternalSeller" class="field-select">
+                                                    <option value="">Selecciona vendedor...</option>
+                                                    <option value="Vendedor Externo 1">Vendedor Externo 1</option>
+                                                    <option value="Vendedor Externo 2">Vendedor Externo 2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="sale-form-row"
+                                            style="grid-template-columns: 1fr 1fr; margin-bottom:14px;">
+                                            <div class="field-group">
+                                                <label class="field-label required">Medio de pago</label>
+                                                <select id="salePaymentMethod" class="field-select" required>
+                                                    <option value="">Selecciona medio...</option>
+                                                    <option value="transferencia">Transferencia directa</option>
+                                                    <option value="efectivo">Efectivo</option>
+                                                    <option value="bold">Bold</option>
+                                                </select>
+                                            </div>
+                                            <div class="field-group">
+                                                <label class="field-label required">Asesor</label>
+                                                <select id="saleAdvisor" class="field-select" required>
+                                                    <option value="">Selecciona asesor...</option>
+                                                    <option value="Asesor 1">Asesor 1</option>
+                                                    <option value="Asesor 2">Asesor 2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /sale-detail-main -->
+
+                                    <!-- Columna derecha: resumen de compra -->
+                                    <div class="sale-summary-sidebar">
+
+                                        <div class="summary-card-title">
+                                            <i class="bi bi-receipt me-2"></i>Resumen del pedido
+                                        </div>
+
+                                        <!-- Estado vacío -->
+                                        <div id="summaryEmpty"
+                                            style="display:flex; flex-direction:column; align-items:center; padding:28px 12px; color:var(--muted); font-size:0.82rem; text-align:center; gap:8px;">
+                                            <i class="bi bi-bag" style="font-size:1.6rem; opacity:0.3;"></i>
+                                            Agrega productos para ver el resumen
+                                        </div>
+
+                                        <!-- Tabla resumen -->
+                                        <div style="overflow-x:auto;">
+                                            <table class="summary-table" style="width:100%; border-collapse:collapse;">
+                                                <thead>
+                                                    <tr>
+                                                        <th
+                                                            style="text-align:left; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0 0 8px; border-bottom:1px solid var(--border); font-weight:500;">
+                                                            Producto</th>
+                                                        <th
+                                                            style="text-align:right; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0 0 8px; border-bottom:1px solid var(--border); font-weight:500;">
+                                                            P. Unit.</th>
+                                                        <th
+                                                            style="text-align:center; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0 0 8px; border-bottom:1px solid var(--border); font-weight:500;">
+                                                            Qty</th>
+                                                        <th
+                                                            style="text-align:right; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0 0 8px; border-bottom:1px solid var(--border); font-weight:500;">
+                                                            Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="summaryTbody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <!-- Total general -->
+                                        <div class="summary-grand-total">
+                                            <span>Total del pedido</span>
+                                            <span id="summaryGrandTotal">$0</span>
+                                        </div>
+
+                                        <p
+                                            style="font-size:0.75rem; color:var(--muted); margin-top:12px; line-height:1.5;">
+                                            El valor total se calcula automáticamente a partir de los productos
+                                            ingresados.
+                                        </p>
+
+                                    </div><!-- /sale-summary-sidebar -->
+
+                                </div><!-- /sale-detail-layout -->
+
+                                <div class="btn-step-nav"
+                                    style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+                                    <button class="btn-prev" id="btnStep2Back" onclick="goBackToStep1()">
+                                        <i class="bi bi-arrow-left"></i> Atrás
+                                    </button>
+                                    <button class="btn-pr btn-pr-wine" id="btnSaveSale">
+                                        <i class="bi bi-check-circle"></i> Registrar venta
+                                    </button>
+                                </div>
+
+                            </div><!-- /step-2-details -->
+
+                        </div><!-- /admin-form-card -->
+
+                    </section>
+
+                    <!-- ══════════ HISTORIAL ══════════ -->
+                    <section class="admin-section" id="section-historial">
+
+                        <div class="admin-table-wrap">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title">Historial completo de movimientos</span>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <select id="historialFilter" class="field-select"
+                                        style="max-width:160px; margin:0;">
+                                        <option value="all">Todos</option>
+                                        <option value="venta">Ventas</option>
+                                        <option value="recarga">Recargas</option>
+                                        <option value="produccion">Producción</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="historialList" style="padding: 0 24px;">
+                                <div class="empty-state">
+                                    <i class="bi bi-clock-history"></i>
+                                    Sin movimientos registrados
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- ══════════ RESEÑAS ══════════ -->
+                    <section class="admin-section" id="section-resenias">
+
+                        <div class="admin-table-wrap" style="margin-bottom:24px;">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title">
+                                    <i class="bi bi-hourglass me-2" style="color:var(--yellow);"></i>
+                                    Reseñas pendientes
+                                </span>
+                                <span id="pendingCount" style="font-size:0.82rem; color:var(--muted);"></span>
+                            </div>
+                            <div id="pendingReviewsList" style="padding: 8px 0;">
+                                <div class="empty-state">
+                                    <i class="bi bi-chat-heart"></i>
+                                    No hay reseñas pendientes
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="admin-table-wrap">
+                            <div class="admin-table-header">
+                                <span class="admin-table-title">
+                                    <i class="bi bi-check-circle me-2" style="color:var(--green);"></i>
+                                    Reseñas publicadas
+                                </span>
+                            </div>
+                            <div id="approvedReviewsList" style="padding: 8px 0;">
+                                <div class="empty-state">
+                                    <i class="bi bi-chat"></i>
+                                    Sin reseñas publicadas aún
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                </div><!-- /admin-content -->
+            </main><!-- /admin-main -->
+
+        </div><!-- /admin-layout -->
+    </div><!-- /adminPanel -->
+
+    <!-- Toast -->
+    <div class="admin-toast" id="adminToast"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Datos perfumes (para el select de ventas) -->
+    <script src="/data-perfumes.js"></script>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getFirestore,
+            collection, doc,
+            addDoc, getDoc, getDocs, updateDoc, deleteDoc, setDoc,
+            query, where, orderBy, limit,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        /* ── CONFIGURACIÓN FIREBASE ─────────────────────────────
+           Debe ser la misma que en tienda.html               */
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjtWzX0ntgyTPrwbgMUtVAfz095t9oEog",
+            authDomain: "praessia.firebaseapp.com",
+            projectId: "praessia",
+            storageBucket: "praessia.firebasestorage.app",
+            messagingSenderId: "855337167445",
+            appId: "1:855337167445:web:df9dcf35667a179e6302dc"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window._adminDB = db;
+        window._adminFS = {
+            collection, doc,
+            addDoc, getDoc, getDocs, updateDoc, deleteDoc, setDoc,
+            query, where, orderBy, limit,
+            serverTimestamp
+        };
+
+        window.dispatchEvent(new Event('adminFirebaseReady'));
+    </script>
+
+    <script src="admin-sales-flow.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        // For local development ensure frontend uses correct backend origin
+        window.__BACKEND_BASE__ = 'http://localhost:3008';
+    </script>
+    <script src="admin-backend.js"></script>
+
+
+</body>
+
+</html>
